@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lançar Tarefa - Aula Miraculosa</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f4ff;
+      margin-left: 220px;
+      padding: 20px;
+      color: #333;
+      display: flex;
+      flex-direction: row;
+      gap: 40px;
+    }
+    .sidebar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 220px;
+      height: 100vh;
+      background: #d62828;
+      padding-top: 40px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 4px 0 12px rgba(0,0,0,0.15);
+      z-index: 1000;
+    }
+    .sidebar a {
+      color: white;
+      text-decoration: none;
+      padding: 15px 25px;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+    .sidebar a:hover {
+      background: #9b1b1b;
+    }
+    h1 {
+      margin-bottom: 25px;
+      color: #b22222;
+      width: 100%;
+    }
+    form {
+      background: white;
+      padding: 25px 30px;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      max-width: 600px;
+      flex: 1;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      margin-top: 20px;
+    }
+    input[type="text"],
+    input[type="date"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.3s ease;
+      resize: vertical;
+    }
+    input[type="text"]:focus,
+    input[type="date"]:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #d62828;
+      outline: none;
+    }
+    textarea {
+      height: 100px;
+    }
+    #iframeInput {
+      font-family: monospace;
+      height: 140px;
+    }
+    button {
+      margin-top: 30px;
+      background: #28a745;
+      border: none;
+      padding: 14px 28px;
+      color: white;
+      font-size: 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.25s ease;
+    }
+    button:hover {
+      background: #1e7e34;
+    }
+    /* Preview */
+    .preview-container {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      max-width: 600px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .preview-title {
+      font-weight: 700;
+      margin-bottom: 15px;
+      color: #6a0dad; /* roxo style Miraculous */
+      font-size: 22px;
+      text-align: center;
+    }
+    .iframe-preview {
+      flex-grow: 1;
+      border: 3px solid #6a0dad;
+      border-radius: 12px;
+      overflow: hidden;
+      min-height: 360px;
+      background: #fafafa;
+    }
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+    /* Popup */
+    .popup {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease-in-out;
+      z-index: 9999;
+    }
+    .popup.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    .popup-content {
+      background: white;
+      padding: 30px 40px;
+      border-radius: 14px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.25);
+      text-align: center;
+      max-width: 320px;
+    }
+    .popup-content svg {
+      width: 50px;
+      height: 50px;
+      margin-bottom: 18px;
+      fill: #28a745;
+    }
+    .popup-content p {
+      font-size: 20px;
+      color: #28a745;
+      font-weight: 700;
+      margin-bottom: 22px;
+    }
+    .popup-content button {
+      padding: 10px 25px;
+      background: #28a745;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.25s ease;
+    }
+    .popup-content button:hover {
+      background: #1e7e34;
+    }
+  </style>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+</head>
+<body>
+
+
+  <div style="flex: 1; display: flex; flex-direction: column;">
+    <h1>Lançar Tarefa</h1>
+
+    <form id="formTarefa">
+      <label for="materia">Qual sua matéria?</label>
+      <input type="text" id="materia" required placeholder="Ex: Ciências" />
+
+      <label for="nomeAula">Nome da aula</label>
+      <input type="text" id="nomeAula" required placeholder="Ex: Aula 5 - Kwamis e suas funções no universo" />
+
+      <label for="miniResumo">Mini resumo da aula</label>
+      <textarea id="miniResumo" required placeholder="Descreva o conteúdo da aula..."></textarea>
+
+      <label for="iframeInput">Frame da tarefa (iframe embutido)</label>
+      <textarea id="iframeInput" required placeholder="Cole aqui o iframe da sua tarefa..."></textarea>
+
+      <label for="dataExpiracao">Data de expiração</label>
+      <input type="date" id="dataExpiracao" required />
+
+      <label for="tipoTarefa">Tipo de tarefa</label>
+      <select id="tipoTarefa" required>
+        <option value="">Selecione...</option>
+        <option value="Prova">Prova</option>
+        <option value="Tarefa">Tarefa</option>
+        <option value="Redação">Redação</option>
+      </select>
+
+      <button type="submit">Lançar Tarefa</button>
+    </form>
+  </div>
+
+  <div class="preview-container">
+    <div class="preview-title">Preview do Frame da Tarefa</div>
+    <div class="iframe-preview" id="iframePreview">
+      <!-- O iframe vai ser inserido aqui -->
+      <p style="color: #999; text-align: center; margin-top: 140px;">Cole o iframe à esquerda para ver o preview.</p>
+    </div>
+  </div>
+
+  <!-- Popup de sucesso -->
+  <div id="popupSucesso" class="popup">
+    <div class="popup-content">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M9 16.17l-3.88-3.88-1.41 1.41L9 19 20.3 7.71l-1.41-1.41z"/>
+      </svg>
+      <p>Tarefa lançada com sucesso!</p>
+      <button id="btnFecharPopup">OK</button>
+    </div>
+  </div>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyCL2e1Zi-pzXQZ-02vQf6I8rYjbi5IzaRo",
+    authDomain: "aula-miraculosa.firebaseapp.com",
+    databaseURL: "https://aula-miraculosa-default-rtdb.firebaseio.com",
+    projectId: "aula-miraculosa",
+    storageBucket: "aula-miraculosa.appspot.com",
+    messagingSenderId: "1067250456026",
+    appId: "1:1067250456026:web:632e43e793155444035ce3"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
+  const form = document.getElementById('formTarefa');
+  const popup = document.getElementById('popupSucesso');
+  const btnFecharPopup = document.getElementById('btnFecharPopup');
+  const iframeInput = document.getElementById('iframeInput');
+  const iframePreview = document.getElementById('iframePreview');
+
+  // Atualiza preview do iframe enquanto o usuário digita/cola
+  iframeInput.addEventListener('input', () => {
+    const valor = iframeInput.value.trim();
+
+    if (valor) {
+      iframePreview.innerHTML = valor;
+    } else {
+      iframePreview.innerHTML = '<p style="color: #999; text-align: center; margin-top: 140px;">Cole o iframe à esquerda para ver o preview.</p>';
+    }
+  });
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const materia = document.getElementById('materia').value.trim();
+    const nomeAula = document.getElementById('nomeAula').value.trim();
+    const miniResumo = document.getElementById('miniResumo').value.trim();
+    const iframeValue = iframeInput.value.trim();
+    const dataExpiracao = document.getElementById('dataExpiracao').value;
+    const tipoTarefa = document.getElementById('tipoTarefa').value;
+
+    if (!materia || !nomeAula || !miniResumo || !iframeValue || !dataExpiracao || !tipoTarefa) {
+      alert('Por favor, preencha todos os campos.');
+      return;
+    }
+
+    // Gerar chave única para a tarefa
+    const novaTarefaKey = db.ref().child('Tarefas').push().key;
+
+    const tarefa = {
+      materia,
+      nomeAula,
+      miniResumo,
+      iframeInput: iframeValue,
+      dataExpiracao,
+      tipoTarefa,
+      timestamp: Date.now()
+    };
+
+    db.ref('Tarefas/' + novaTarefaKey).set(tarefa)
+      .then(() => {
+        popup.classList.add('show');
+        form.reset();
+        iframePreview.innerHTML = '<p style="color: #999; text-align: center; margin-top: 140px;">Cole o iframe à esquerda para ver o preview.</p>';
+      })
+      .catch((error) => {
+        alert('Erro ao salvar a tarefa: ' + error.message);
+      });
+  });
+
+  btnFecharPopup.addEventListener('click', () => {
+    popup.classList.remove('show');
+  });
+</script>
+
+</body>
+</html>

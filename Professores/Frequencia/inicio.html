@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Frequência - Início</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #fefefe;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    padding: 0 20px;
+    box-sizing: border-box;
+  }
+  .container {
+    display: flex;
+    gap: 40px;
+    max-width: 600px;
+    width: 100%;
+  }
+  .box {
+    flex: 1;
+    background: #ff4d6d; /* rosa vibrante estilo Miraculous */
+    color: white;
+    border-radius: 18px;
+    box-shadow: 0 8px 18px rgb(255 77 109 / 0.4);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    font-weight: 700;
+    font-size: 1.4rem;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+    text-decoration: none;
+  }
+  .box:hover {
+    background: #ff7995;
+    box-shadow: 0 12px 30px rgb(255 119 149 / 0.6);
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <a href="Verificar.html" class="box" title="Ver Frequências Lançadas">
+    Frequências Lançadas
+  </a>
+  <a href="Adicionar.html" class="box" title="Lançar Nova Frequência">
+    Lançar Frequência
+  </a>
+</div>
+
+</body>
+</html>

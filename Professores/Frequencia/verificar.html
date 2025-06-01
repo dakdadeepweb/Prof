@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Verificar Presenças</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #dc3545;
+    }
+
+    #filtroData {
+      display: block;
+      margin: 20px auto 30px auto;
+      padding: 10px;
+      font-size: 16px;
+      width: 300px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    .card-container {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: #e0e0e0;
+      padding: 20px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+
+    .card:hover {
+      background: #cccccc;
+    }
+
+    /* POPUP */
+    .popup {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.4);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .popup.show {
+      display: flex;
+    }
+
+    .popup-content {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      width: 400px;
+      max-width: 90%;
+      text-align: left;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    }
+
+    .popup-content h2 {
+      margin-top: 0;
+      color: #dc3545;
+    }
+
+    .popup-content p {
+      margin: 10px 0;
+      font-size: 16px;
+    }
+
+    .popup-content button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #dc3545;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .popup-content button:hover {
+      background: #c82333;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Todas as presenças já lançadas</h1>
+  <input type="text" id="filtroData" placeholder="Filtrar por data...">
+
+  <div class="card-container" id="cardsContainer"></div>
+
+  <!-- POPUP -->
+  <div class="popup" id="popup">
+    <div class="popup-content">
+      <h2 id="popupData">Data</h2>
+      <p><strong>Número de alunos presentes:</strong> <span id="countP">0</span></p>
+      <p><strong>Número de faltas:</strong> <span id="countF">0</span></p>
+      <button onclick="fecharPopup()">Fechar</button>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
+    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-database.js";
+
+    const firebaseConfig = {
+  apiKey: "AIzaSyCL2e1Zi-pzXQZ-02vQf6I8rYjbi5IzaRo",
+  authDomain: "aula-miraculosa.firebaseapp.com",
+  databaseURL: "https://aula-miraculosa-default-rtdb.firebaseio.com",
+  projectId: "aula-miraculosa",
+  storageBucket: "aula-miraculosa.firebasestorage.app",
+  messagingSenderId: "1067250456026",
+  appId: "1:1067250456026:web:632e43e793155444035ce3",
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const dbRef = ref(db, 'Frequencias');
+
+    const container = document.getElementById("cardsContainer");
+    const filtroInput = document.getElementById("filtroData");
+    const popup = document.getElementById("popup");
+    const popupData = document.getElementById("popupData");
+    const countP = document.getElementById("countP");
+    const countF = document.getElementById("countF");
+
+    let dadosBrutos = {};
+
+    get(dbRef).then(snapshot => {
+      if (snapshot.exists()) {
+        dadosBrutos = snapshot.val();
+        renderizarCards(dadosBrutos);
+      } else {
+        container.innerHTML = "<p style='text-align:center;'>Nenhuma presença encontrada.</p>";
+      }
+    });
+
+    function renderizarCards(data) {
+      container.innerHTML = "";
+      const datas = Object.keys(data);
+
+      datas.forEach(dataKey => {
+        if (dataKey.toLowerCase().includes(filtroInput.value.toLowerCase())) {
+          const card = document.createElement("div");
+          card.className = "card";
+          card.innerText = dataKey;
+          card.addEventListener("click", () => abrirPopup(dataKey, data[dataKey]));
+          container.appendChild(card);
+        }
+      });
+    }
+
+    filtroInput.addEventListener("input", () => {
+      renderizarCards(dadosBrutos);
+    });
+
+    function abrirPopup(data, alunos) {
+      let presentes = 0;
+      let faltas = 0;
+
+      for (const nome in alunos) {
+        if (alunos[nome] === "P") presentes++;
+        else faltas++;
+      }
+
+      popupData.innerText = `Data: ${data}`;
+      countP.innerText = presentes;
+      countF.innerText = faltas;
+      popup.classList.add("show");
+    }
+
+    window.fecharPopup = function () {
+      popup.classList.remove("show");
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,92 @@
+body {
+  font-family: "Segoe UI", sans-serif;
+  margin: 0;
+  background: #f5f5fa;
+}
+
+.container {
+  display: flex;
+}
+
+.sidebar {
+  width: 220px;
+  background-color: #c62828;
+  color: white;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+.sidebar button {
+  background-color: #fff;
+  color: #c62828;
+  border: none;
+  padding: 10px;
+  margin-top: 10px;
+  cursor: pointer;
+  width: 100%;
+  font-weight: bold;
+  border-radius: 8px;
+}
+
+.conteudo {
+  flex-grow: 1;
+  padding: 30px;
+}
+
+.botao-imagem {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  background-color: #f44336;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+.botao-imagem img {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.popup-content {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+.popup-content label {
+  margin-bottom: 10px;
+}
+
+.popup-content input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+}
+
+.popup-content button {
+  margin-top: 10px;
+  padding: 10px;
+}
+
+.hidden {
+  display: none;
+}
