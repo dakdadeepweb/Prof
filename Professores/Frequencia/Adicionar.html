@@ -1,225 +1,217 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Aula Miraculosa - Adicionar Frequência</title>
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Lançamento de Frequência</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f9f9f9;
+    padding: 20px;
+  }
+  h1 {
+    margin-bottom: 20px;
+    color: #333;
+  }
+  .controles {
+    margin-bottom: 15px;
+  }
+  button {
+    cursor: pointer;
+  }
+  #marcarTodosP, #marcarTodosF {
+    padding: 10px 20px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    font-weight: bold;
+  }
+  #marcarTodosP {
+    background-color: #28a745;
+  }
+  #marcarTodosF {
+    background-color: #dc3545;
+  }
+  .aluno-card {
+    background: white;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 5px rgb(0 0 0 / 0.1);
+  }
+  .aluno-num {
+    font-weight: bold;
+    margin-right: 12px;
+    width: 30px;
+    text-align: right;
+    color: #555;
+  }
+  .aluno-nome {
+    flex-grow: 1;
+    font-size: 16px;
+    color: #222;
+  }
+  .btn-presente, .btn-falta {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    font-weight: bold;
+    color: white;
+    margin-left: 10px;
+    transition: background-color 0.3s;
+  }
+  .btn-presente {
+    background-color: #6c757d;
+  }
+  .btn-falta {
+    background-color: #6c757d;
+  }
+  .btn-presente.active {
+    background-color: #28a745 !important;
+  }
+  .btn-falta.active {
+    background-color: #dc3545 !important;
+  }
+  #btnSalvar {
+    margin-top: 25px;
+    padding: 12px 30px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #007bff;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    display: block;
+  }
 
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      padding: 0;
-      margin-left: 220px;
-      background: #f9f9f9;
-    }
+  /* POPUP */
+  .popup {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease-in-out;
+    z-index: 999;
+  }
+  .popup.show {
+    opacity: 1;
+    visibility: visible;
+  }
+  .popup-content {
+    background: white;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    text-align: center;
+    max-width: 320px;
+  }
+  .popup-content svg {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 15px;
+    fill: #28a745;
+  }
+  .popup-content p {
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: #28a745;
+    font-weight: bold;
+  }
+  .popup-content button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #28a745;
+    color: white;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 220px;
+  height: 100vh;
+  background: #dc3545;
+  padding-top: 40px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 4px 0 12px rgba(0,0,0,0.1);
+  z-index: 1000;
+}
+.sidebar a {
+  color: white;
+  text-decoration: none;
+  padding: 15px 25px;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+.sidebar a:hover {
+  background: #c82333;
+}
+body {
+  margin-left: 220px; /* empurra o conteúdo pro lado */
+}
 
-    .sidebar {
-      position: fixed;
-      left: 0;
-      top: 0;
-      width: 220px;
-      height: 100vh;
-      background: #dc3545;
-      padding-top: 40px;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 4px 0 12px rgba(0,0,0,0.1);
-      z-index: 1000;
-    }
-
-    .sidebar a {
-      color: white;
-      text-decoration: none;
-      padding: 15px 25px;
-      font-weight: bold;
-      transition: background 0.2s;
-    }
-
-    .sidebar a:hover {
-      background: #c82333;
-    }
-
-    h1 {
-      text-align: center;
-      color: #dc3545;
-      margin-top: 20px;
-    }
-
-    .botoes-superior {
-      text-align: center;
-      margin: 20px 0;
-    }
-
-    .botoes-superior button {
-      padding: 10px 15px;
-      margin: 5px;
-      background-color: #28a745;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    .botoes-superior button:hover {
-      background-color: #218838;
-    }
-
-    .cards-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .card {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #fff;
-      width: 90%;
-      max-width: 600px;
-      margin: 10px;
-      padding: 15px 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-
-    .botoes {
-      display: flex;
-      gap: 10px;
-    }
-
-    .botoes button {
-      padding: 8px 12px;
-      font-size: 16px;
-      font-weight: bold;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    .botoes .presente {
-      background-color: #28a745;
-      color: white;
-    }
-
-    .botoes .falta {
-      background-color: #dc3545;
-      color: white;
-    }
-
-    .popup {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      background: rgba(0,0,0,0.5);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 2000;
-    }
-
-    .popup.show {
-      display: flex;
-    }
-
-    .popup-content {
-      background: white;
-      padding: 30px;
-      border-radius: 10px;
-      text-align: center;
-    }
-
-    .popup-content p {
-      margin-bottom: 20px;
-      font-size: 18px;
-    }
-
-    .popup-content button {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 8px;
-      background-color: #dc3545;
-      color: white;
-      cursor: pointer;
-    }
-
-    .popup-content button:hover {
-      background-color: #c82333;
-    }
-
-    @media screen and (max-width: 768px) {
-      .sidebar {
-        position: fixed;
-        width: 100%;
-        height: auto;
-        flex-direction: row;
-        padding-top: 10px;
-        overflow-x: auto;
-        z-index: 1001;
-      }
-
-      .sidebar a {
-        flex: 1;
-        text-align: center;
-        padding: 10px;
-        font-size: 14px;
-      }
-
-      body {
-        margin-left: 0;
-        padding-top: 60px;
-      }
-
-      .card {
-        flex-direction: column;
-        align-items: flex-start;
-        text-align: left;
-      }
-
-      .botoes {
-        margin-top: 10px;
-      }
-    }
-  </style>
+</style>
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 </head>
 <body>
 
-  <div class="sidebar">
-    <a href="inicio.html">🏠 Início</a>
-    <a href="Adicionar.html">📋 Frequência</a>
-    <a href="Verificar.html">🗂️ Registros</a>
-    <a href="#">📝 Notas</a>
-    <a href="#">📚 Tarefas</a>
+
+<h1>LANÇAMENTO DE FREQUÊNCIA</h1>
+
+<div class="controles">
+  <button id="marcarTodosP">Marcar todos como P</button>
+  <button id="marcarTodosF">Marcar todos como F</button>
+</div>
+
+<div id="listaAlunos"></div>
+
+<button id="btnSalvar">Salvar</button>
+
+<!-- POPUP DE CONFIRMAÇÃO -->
+<div id="popupConfirm" class="popup">
+  <div class="popup-content">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 16.17l-3.88-3.88-1.41 1.41L9 19 20.3 7.71l-1.41-1.41z"/></svg>
+    <p id="popupTexto"></p>
+    <button id="popupBtnSim">Sim</button>
+    <button id="popupBtnNao" style="margin-left: 10px; background:#dc3545;">Não</button>
   </div>
+</div>
 
-  <h1>Adicionar Frequência</h1>
-
-  <div class="botoes-superior">
-    <button onclick="marcarTodos('P')">Marcar todos como P</button>
-    <button onclick="marcarTodos('F')">Marcar todos como F</button>
-    <button onclick="salvarFrequencia()">Lançar Frequência</button>
+<!-- POPUP SUCESSO -->
+<div id="popupSucesso" class="popup">
+  <div class="popup-content">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 16.17l-3.88-3.88-1.41 1.41L9 19 20.3 7.71l-1.41-1.41z"/></svg>
+    <p>Lançamento salvo com Sucesso!</p>
+    <button id="popupBtnOk">OK</button>
   </div>
-
-  <div class="cards-container" id="cardsContainer">
-    <!-- Alunos vão aparecer aqui dinamicamente -->
+</div>
+<!-- POPUP REGISTRO -->
+<div id="popupRegistro" class="popup">
+  <div class="popup-content">
+    <p>Gostaria de fazer o registro da aula?</p>
+    <button id="popupIrRegistro">Sim</button>
+    <button id="popupCancelarRegistro" style="margin-left: 10px; background:#6c757d;">Não</button>
   </div>
+</div>
 
-  <!-- Popup de sucesso -->
-  <div class="popup" id="popupSucesso">
-    <div class="popup-content">
-      <p>✅ Frequência salva com sucesso!</p>
-      <button onclick="fecharPopup()">Fechar</button>
-    </div>
-  </div>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
-    import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-database.js";
-
-    const firebaseConfig = {
+<script>
+  // CONFIG DO FIREBASE - troque pelas suas configs do seu projeto
+  const firebaseConfig = {
   apiKey: "AIzaSyCL2e1Zi-pzXQZ-02vQf6I8rYjbi5IzaRo",
   authDomain: "aula-miraculosa.firebaseapp.com",
   databaseURL: "https://aula-miraculosa-default-rtdb.firebaseio.com",
@@ -227,84 +219,183 @@
   storageBucket: "aula-miraculosa.firebasestorage.app",
   messagingSenderId: "1067250456026",
   appId: "1:1067250456026:web:632e43e793155444035ce3",
-    };
+  };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    const dbRef = ref(db);
+  // INICIALIZA O FIREBASE
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
 
-    const cardsContainer = document.getElementById("cardsContainer");
-    const popupSucesso = document.getElementById("popupSucesso");
-    const presencas = {};
+  const listaAlunos = document.getElementById('listaAlunos');
+  const marcarTodosP = document.getElementById('marcarTodosP');
+  const marcarTodosF = document.getElementById('marcarTodosF');
+  const btnSalvar = document.getElementById('btnSalvar');
 
-    function carregarAlunos() {
-      get(child(dbRef, "Alunos")).then(snapshot => {
-        if (snapshot.exists()) {
-          const data = snapshot.val();
-          const nomes = Object.values(data).map(aluno => aluno.Nome);
+  const popupConfirm = document.getElementById('popupConfirm');
+  const popupSucesso = document.getElementById('popupSucesso');
+  const popupTexto = document.getElementById('popupTexto');
+  const popupBtnSim = document.getElementById('popupBtnSim');
+  const popupBtnNao = document.getElementById('popupBtnNao');
+  const popupBtnOk = document.getElementById('popupBtnOk');
 
-          nomes.forEach((nome, index) => {
-            const card = document.createElement("div");
-            card.className = "card";
+  let alunosData = [];
+  let frequenciaMarcada = {}; // { alunoNome: 'P' ou 'F' }
 
-            const nomeSpan = document.createElement("span");
-            nomeSpan.textContent = `${index + 1}. ${nome}`;
+  // FUNÇÃO PRA CARREGAR ALUNOS DO FIREBASE
+  function carregarAlunos() {
+    db.ref('Alunos').orderByKey().once('value')
+      .then(snapshot => {
+        alunosData = [];
+        listaAlunos.innerHTML = '';
+        let index = 1;
+        snapshot.forEach(childSnap => {
+          const nomeAluno = childSnap.key;
+          alunosData.push(nomeAluno);
 
-            const botoes = document.createElement("div");
-            botoes.className = "botoes";
+          const card = document.createElement('div');
+          card.className = 'aluno-card';
 
-            const btnP = document.createElement("button");
-            btnP.textContent = "P";
-            btnP.className = "presente";
-            btnP.onclick = () => presencas[nome] = "P";
+          const num = document.createElement('div');
+          num.className = 'aluno-num';
+          num.textContent = index++;
 
-            const btnF = document.createElement("button");
-            btnF.textContent = "F";
-            btnF.className = "falta";
-            btnF.onclick = () => presencas[nome] = "F";
+          const nome = document.createElement('div');
+          nome.className = 'aluno-nome';
+          nome.textContent = nomeAluno;
 
-            botoes.appendChild(btnP);
-            botoes.appendChild(btnF);
-            card.appendChild(nomeSpan);
-            card.appendChild(botoes);
-            cardsContainer.appendChild(card);
+          const btnP = document.createElement('button');
+          btnP.className = 'btn-presente';
+          btnP.textContent = 'P';
+          btnP.title = 'Presente';
+
+          const btnF = document.createElement('button');
+          btnF.className = 'btn-falta';
+          btnF.textContent = 'F';
+          btnF.title = 'Faltou';
+
+          // Eventos de clique para marcar presente/falta
+          btnP.addEventListener('click', () => {
+            frequenciaMarcada[nomeAluno] = 'P';
+            atualizarBotoes(card, btnP, btnF);
           });
-        } else {
-          alert("Nenhum aluno encontrado.");
-        }
-      }).catch(error => {
-        console.error("Erro ao carregar alunos:", error);
+          btnF.addEventListener('click', () => {
+            frequenciaMarcada[nomeAluno] = 'F';
+            atualizarBotoes(card, btnP, btnF);
+          });
+
+          card.appendChild(num);
+          card.appendChild(nome);
+          card.appendChild(btnP);
+          card.appendChild(btnF);
+
+          listaAlunos.appendChild(card);
+        });
+      })
+      .catch(err => {
+        alert('Erro ao carregar alunos: ' + err.message);
       });
+  }
+
+  // Atualiza visual dos botões P/F
+  function atualizarBotoes(card, btnP, btnF) {
+    if(frequenciaMarcada[card.querySelector('.aluno-nome').textContent] === 'P') {
+      btnP.classList.add('active');
+      btnF.classList.remove('active');
+    } else if(frequenciaMarcada[card.querySelector('.aluno-nome').textContent] === 'F') {
+      btnF.classList.add('active');
+      btnP.classList.remove('active');
+    } else {
+      btnP.classList.remove('active');
+      btnF.classList.remove('active');
     }
+  }
 
-    window.marcarTodos = function(status) {
-      const spans = cardsContainer.querySelectorAll("span");
-      spans.forEach(span => {
-        const nome = span.textContent.split('. ')[1];
-        presencas[nome] = status;
+  // Marcar todos como P
+  marcarTodosP.addEventListener('click', () => {
+    alunosData.forEach(nomeAluno => {
+      frequenciaMarcada[nomeAluno] = 'P';
+    });
+    atualizarTodos();
+  });
+
+  // Marcar todos como F
+  marcarTodosF.addEventListener('click', () => {
+    alunosData.forEach(nomeAluno => {
+      frequenciaMarcada[nomeAluno] = 'F';
+    });
+    atualizarTodos();
+  });
+
+  function atualizarTodos() {
+    const cards = document.querySelectorAll('.aluno-card');
+    cards.forEach(card => {
+      const nomeAluno = card.querySelector('.aluno-nome').textContent;
+      const btnP = card.querySelector('.btn-presente');
+      const btnF = card.querySelector('.btn-falta');
+      atualizarBotoes(card, btnP, btnF);
+    });
+  }
+
+  // Salvar frequência no Firebase (data hoje)
+  btnSalvar.addEventListener('click', () => {
+    if(Object.keys(frequenciaMarcada).length !== alunosData.length) {
+      // Mostrar popup confirmando salvar mesmo assim
+      popupTexto.textContent = 'Nem todos os alunos foram marcados. Salvar mesmo assim?';
+      popupConfirm.classList.add('show');
+    } else {
+      salvarFrequencia();
+    }
+  });
+
+  popupBtnSim.addEventListener('click', () => {
+    salvarFrequencia();
+    popupConfirm.classList.remove('show');
+  });
+
+  popupBtnNao.addEventListener('click', () => {
+    popupConfirm.classList.remove('show');
+  });
+
+  popupBtnOk.addEventListener('click', () => {
+    popupSucesso.classList.remove('show');
+  });
+
+  function salvarFrequencia() {
+    const hoje = new Date();
+    const dia = hoje.getDate().toString().padStart(2, '0');
+    const mes = (hoje.getMonth() + 1).toString().padStart(2, '0');
+    const ano = hoje.getFullYear();
+    const dataFormatada = `${ano}-${mes}-${dia}`; // formato YYYY-MM-DD
+
+    db.ref('Frequencias/' + dataFormatada).set(frequenciaMarcada)
+      .then(() => {
+        popupSucesso.classList.add('show');
+      })
+      .catch((err) => {
+        alert('Erro ao salvar: ' + err.message);
       });
-      alert(`Todos marcados como ${status}`);
-    };
+  }
 
-    window.salvarFrequencia = function() {
-      const dataAtual = new Date();
-      const dia = String(dataAtual.getDate()).padStart(2, '0');
-      const mes = String(dataAtual.getMonth() + 1).padStart(2, '0');
-      const ano = dataAtual.getFullYear();
-      const dataFormatada = `${dia}/${mes}/${ano}`;
+  // INICIAR
+  carregarAlunos();
+  const popupRegistro = document.getElementById('popupRegistro');
+const btnRegistroSim = document.getElementById('popupIrRegistro');
+const btnRegistroNao = document.getElementById('popupCancelarRegistro');
 
-      const refDB = ref(db, "Frequencias/" + dataFormatada);
-      set(refDB, presencas).then(() => {
-        popupSucesso.classList.add("show");
-      });
-    };
+// Quando clica OK no sucesso, mostrar novo popup
+popupBtnOk.addEventListener('click', () => {
+  popupSucesso.classList.remove('show');
+  popupRegistro.classList.add('show');
+});
 
-    window.fecharPopup = function() {
-      popupSucesso.classList.remove("show");
-    };
+btnRegistroSim.addEventListener('click', () => {
+  window.location.href = "Registros.html"; // vai pra página de registro
+});
 
-    carregarAlunos();
-  </script>
+btnRegistroNao.addEventListener('click', () => {
+  popupRegistro.classList.remove('show');
+});
+
+</script>
 
 </body>
 </html>
