@@ -74,7 +74,7 @@
         const dados = snapshot.val();
         if (dados && dados.Senha === senha) {
           mostrarPopup(`Bem-vindo(a), ${dados.Nome}!`, () => {
-            window.location.href = "Professores/index.html";
+            window.location.href = "homeprofessor.html";
           });
         } else {
           mostrarPopup("Nome ou senha incorretos!");
