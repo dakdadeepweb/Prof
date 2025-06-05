@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Diário de Classe | Sala Miraculosa</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #ffffff;
+      display: flex;
+      height: 100vh;
+    }
+
+    .sidebar {
+      width: 220px;
+      background-color: #f4f4f4;
+      padding: 20px;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .sidebar a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+      padding: 10px;
+      border-radius: 8px;
+      transition: background 0.3s ease;
+    }
+
+    .sidebar a:hover {
+      background-color: #00ccff;
+    }
+
+    .main-content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .titulo {
+      font-size: 2.5rem;
+      color: #ff4d6d;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sidebar">
+    <a href="diario_de_classe_avaliacoes.html">Avaliações</a>
+    <a href="diario_de_classe_fechamento.html">Fechamento</a>
+    <a href="diario_de_classe_frequencia.html">Frequência</a>
+    <a href="diario_de_classe_registro_de_aulas.html">Registro de Aulas</a>
+    <a href="diario_de_classe_relatorios.html">Relatórios</a>
+  </div>
+
+  <div class="main-content">
+    <h1 class="titulo">Diário de Classe</h1>
+  </div>
+
+</body>
+</html>

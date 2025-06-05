@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Diário de Classe - Avaliações</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      height: 100vh;
+      background: #f5f7fa;
+    }
+    .sidebar {
+      width: 220px;
+      background: #ffffff;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+      padding: 20px;
+    }
+    .sidebar a {
+      display: block;
+      margin-bottom: 15px;
+      text-decoration: none;
+      color: #333;
+      padding: 10px;
+      border-radius: 8px;
+      transition: 0.3s;
+    }
+    .sidebar a:hover {
+      background: #e0e0e0;
+    }
+    .content {
+      flex: 1;
+      padding: 30px;
+    }
+    h1 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .btn {
+      display: inline-block;
+      background: #3498db;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+      margin-top: 10px;
+      transition: 0.3s;
+    }
+    .btn:hover {
+      background: #2980b9;
+    }
+    .popup-bg {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+    }
+    .popup {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      width: 300px;
+      position: relative;
+    }
+    .popup input, .popup select {
+      width: 100%;
+      margin: 10px 0;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+    }
+    .calendar div {
+      padding: 5px;
+      background: #ecf0f1;
+      text-align: center;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .calendar div:hover {
+      background: #bdc3c7;
+    }
+    .success-popup {
+      text-align: center;
+    }
+    .success-popup img {
+      width: 100px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="sidebar">
+  <h2>Diário</h2>
+  <a href="diario_de_classe_avaliacoes.html">Avaliações</a>
+  <a href="diario_de_classe_fechamento.html">Fechamento</a>
+  <a href="diario_de_classe_frequencia.html">Frequência</a>
+  <a href="diario_de_classe_registro_de_aulas.html">Registro de Aulas</a>
+  <a href="diario_de_classe_relatorios.html">Relatórios</a>
+</div>
+
+<div class="content">
+  <h1>Diário de Classe</h1>
+  <div class="btn" onclick="abrirPopup()">Criar Avaliação</div>
+</div>
+
+<div class="popup-bg" id="popup-bg" onclick="fecharPopup(event)">
+  <div class="popup">
+    <h3>Nova Avaliação</h3>
+    <input type="text" id="nome" placeholder="Nome da avaliação">
+    <label>Data da avaliação:</label>
+    <div class="calendar" id="calendar"></div>
+    <label>Tipo:</label>
+    <select id="tipo">
+      <option>Avaliação</option>
+      <option>Trabalho</option>
+      <option>Atividade</option>
+      <option>Outros</option>
+    </select>
+    <input type="number" id="peso" placeholder="Peso (%)">
+    <label>Matéria:</label>
+    <select id="materia">
+      <option>Kwamilogia</option>
+      <option>Simulação Multiverso</option>
+      <option>História dos Miraculous</option>
+      <option>Matemática</option>
+    </select>
+    <label>Já pediu ao Jho?</label>
+    <select id="pedido">
+      <option>Sim</option>
+      <option>Não</option>
+    </select>
+    <input type="url" id="link" placeholder="Link da prova">
+    <div class="btn" onclick="salvarAvaliacao()">Lançar Avaliação</div>
+  </div>
+</div>
+
+<div class="popup-bg" id="success-bg" onclick="fecharSuccess(event)">
+  <div class="popup success-popup">
+    <img src="correto.png" alt="Correto">
+    <p>Avaliação salva com sucesso!</p>
+    <div class="btn" onclick="fecharSuccess()">OK</div>
+  </div>
+</div>
+
+<script>
+  const popupBg = document.getElementById('popup-bg');
+  const successBg = document.getElementById('success-bg');
+  let dataSelecionada = '';
+
+  function abrirPopup() {
+    popupBg.style.display = 'flex';
+    gerarCalendario();
+  }
+
+  function fecharPopup(e) {
+    if (e.target === popupBg) popupBg.style.display = 'none';
+  }
+
+  function fecharSuccess(e) {
+    if (!e || e.target === successBg) successBg.style.display = 'none';
+  }
+
+  function gerarCalendario() {
+    const calendario = document.getElementById('calendar');
+    calendario.innerHTML = '';
+    const hoje = new Date();
+    const dias = new Date(hoje.getFullYear(), hoje.getMonth()+1, 0).getDate();
+    for (let d = 1; d <= dias; d++) {
+      const dia = document.createElement('div');
+      dia.textContent = d;
+      dia.onclick = () => {
+        dataSelecionada = `${d}/${hoje.getMonth()+1}/${hoje.getFullYear()}`;
+        alert(`Data selecionada: ${dataSelecionada}`);
+      };
+      calendario.appendChild(dia);
+    }
+  }
+
+  function salvarAvaliacao() {
+    const nome = document.getElementById('nome').value;
+    const tipo = document.getElementById('tipo').value;
+    const peso = document.getElementById('peso').value;
+    const materia = document.getElementById('materia').value;
+    const pedido = document.getElementById('pedido').value;
+    const link = document.getElementById('link').value;
+
+    const dados = {
+      nome, tipo, peso, materia, pedido, link, data: dataSelecionada
+    };
+
+    // Firebase push
+    // firebase.database().ref('/avaliacoes').push(dados);
+
+    console.log('Salvo:', dados);
+    popupBg.style.display = 'none';
+    successBg.style.display = 'flex';
+  }
+</script>
+
+</body>
+</html>

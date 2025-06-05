@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Home do Professor</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      margin-left: 220px;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .botao {
+      display: inline-flex;
+      align-items: center;
+      background-color: #007bff;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      margin: 10px 0;
+      transition: background 0.3s;
+    }
+    .botao:hover {
+      background-color: #0056b3;
+    }
+    .botao img {
+      width: 24px;
+      height: 24px;
+      margin-right: 10px;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 220px;
+      height: 100vh;
+      background: #dc3545;
+      padding-top: 40px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 4px 0 12px rgba(0,0,0,0.1);
+      z-index: 1000;
+    }
+    .sidebar h2 {
+      color: white;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .sidebar a {
+      color: white;
+      text-decoration: none;
+      padding: 15px 25px;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+    .sidebar a:hover {
+      background: #c82333;
+    }
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <h2>Diário de Classe</h2>
+  <a href="diario_de_classe_avaliacoes.html">Avaliações</a>
+  <a href="diario_de_classe_fechamento.html">Fechamento</a>
+  <a href="diario_de_classe_frequencia.html">Frequência</a>
+  <a href="diario_de_classe_registro.html">Registro de Aulas</a>
+  <a href="diario_de_classe_relatorios.html">Relatórios</a>
+</div>
+
+<h1>Bem-vindo, Professor!</h1>
+
+<!-- Outros botões existentes aqui -->
+
+<!-- Botão Repositório -->
+<a class="botao" href="https://Repositorio.vercel.app" target="_blank">
+  <img src="repositorio..png" alt="Repositório">
+  Repositório
+</a>
+
+<a class="botao" href="diario_de_classe-home.html" target="_blank">
+  <img src="diario.png" alt="Diario de Classe">
+  Diario de Classe
+</a>
+</body>
+</html>
